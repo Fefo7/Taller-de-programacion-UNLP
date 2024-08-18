@@ -1,11 +1,7 @@
 program	main2;
 procedure GenerateRandomR ( min: integer; max:integer; var NumRandom: integer);
 begin
-NumRandom := random(max);
-	if (NumRandom >= min) then	
-		writeln ('El numero aleatorio generado es: ', NumRandom)
-	Else
-		NumRandom:=random(max); 
+		NumRandom := Random(max - min + 1) + min;
 end;
 procedure	LeerPorTeclado(var a: integer;var b: integer; var c: integer);
 begin
@@ -42,22 +38,25 @@ begin
      for i:=1 to n  do 
 		begin
 			GenerateRandomR(a,b,ale);
+			writeln ('el numero es: ',ale);
 		end;
 	 writeln ('Presione cualquier tecla para finalizar');
      readln;
 end;
 procedure incisoE();
 var 
-	a,b,f : integer;
+	a,b,f,i : integer;
 	ale: integer;
 begin
 LeerPorTeclado(a,b,f);
 	randomize;
 	GenerateRandomR(a,b,ale);
-	while ( ale = f) do 
+	i:= 1;
+	while ( (ale <> f )and (i <= f)) do 
 	begin
 			writeln ('El numero aleatorio generado es: ', ale);
 			GenerateRandomR(a,b,ale);
+			i:= i+1;
 	end;
 	 writeln ('Presione cualquier tecla para finalizar');
      readln;
@@ -65,6 +64,7 @@ end;
 
 
 begin
-    // incisoC();
+  incisoC();
   incisoD();
+  incisoE
 end.

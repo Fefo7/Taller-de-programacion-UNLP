@@ -20,11 +20,11 @@ indent_mode=2
 [project]
 name=Main2.pas
 base_path=C:\\Users\\Usuario\\proyectos\\Taller-de-programaci-n-UNLP-\\Practica0
+description=
 
 [long line marker]
 long_line_behaviour=1
 long_line_column=73
 
 [files]
-current_page=0
-FILE_NAME_0=412;Pascal;0;EUTF-8;1;1;0;C%3A%5CUsers%5CUsuario%5Cproyectos%5CTaller-de-programaci-n-UNLP-%5CPractica0%5Cmain2.pas;0;4
+current_page=-1
