@@ -1,6 +1,4 @@
 program main4;
-
-
 procedure Parsebinary (num: integer);
 var
 	cociente, resto: integer;
@@ -23,8 +21,5 @@ BEGIN
 		writeln('ingrese el numero que quiere convertir a binario');
 		readln(num);
 	end;
-	
-
-
 END.
 
