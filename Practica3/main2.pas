@@ -135,12 +135,12 @@ begin
 		a^.HI:= nil;
 	end
 	else
-		if(v.code < a^.elem.code)then
-			InsertarNodo3(a^.HI, v)
+		if(v.code = a^.elem.code)then
+		        CargarVentaList(a^.elem.ventas, v)
 		else if (v.code > a^.elem.code) then
-					InsertarNodo3(a^.HD,v)
+			InsertarNodo3(a^.HI,v)
 		else
-			CargarVentaList(a^.elem.ventas, v);
+			InsertarNodo3(a^.HD,v);
 end;
 
 {Inciso A}
