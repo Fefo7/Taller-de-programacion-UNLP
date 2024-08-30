@@ -3,7 +3,6 @@ program main3;
 type
 	Rnota= 1..10;
 	Examen = record
-		legajo:integer;
 		codeMateria: integer;
 		fecha:string;
 		nota: Rnota;
@@ -27,11 +26,11 @@ type
 		hd:arbol;
 		end;
 	
-procedure leerExamen(var e:examen);
+procedure leerExamen(var e:examen; var legajo:integer);
 begin
 	writeln('ingrese el legajo: ');
-	readln(e.legajo);
-	if(e.legajo <> 0) then
+	readln(legajo);
+	if(legajo <> 0) then
 	begin
 		writeln('ingrese el codigo de la materia: ');
 		readln(e.codeMateria);
@@ -53,14 +52,14 @@ begin
 end;
 
 
-procedure InsertarNodo(var a: arbol; e:Examen);
+procedure InsertarNodo(var a: arbol; e:Examen; legajo: integer);
 var
 	aux: arbol;
 begin
 	if(a= nil) then
 	begin
 		new(aux);
-		aux^.elem.legajo:= e.legajo;
+		aux^.elem.legajo:= legajo;
 		aux^.elem.ListaExamenes := nil;
 		CargarLista(aux^.elem.ListaExamenes, e);
 		aux^.hi:= nil;
@@ -68,26 +67,27 @@ begin
 		a:= aux;
 	end
 	else
-		if (a^.elem.legajo = e.legajo) then
+		if (a^.elem.legajo = legajo) then
 			CargarLista(a^.elem.ListaExamenes, e)
 		else
 			begin
-			if (a^.elem.legajo > e.legajo) then
-				InsertarNodo(a^.hi,e)
+			if (a^.elem.legajo > legajo) then
+				InsertarNodo(a^.hi,e, legajo)
 			else
-				InsertarNodo(a^.hd, e);
+				InsertarNodo(a^.hd, e, legajo);
 			end;
 end;
 			
 procedure CargarExamen (var a:arbol);
 var
 	e:Examen;
+	legajo:integer;
 begin
-	leerExamen(e);
-	while(e.legajo <> 0)do
+	leerExamen(e,legajo);
+	while(legajo <> 0)do
 	begin
-		InsertarNodo(a,e);
-		leerExamen(e);
+		InsertarNodo(a,e, legajo);
+		leerExamen(e,legajo);
 	end;
 end;
 
@@ -166,8 +166,8 @@ begin
 		calcularPromedio(a^.elem.ListaExamenes, promedio);
 		if(promedio > numero ) then
 			writeln(a^.elem.legajo, ' promedio del alumno: ', promedio :2:0 );
-		MostrarFAprobados(a^.hi);
-		MostrarFAprobados(a^.hd);
+		BuscarPromedios(a^.hi, promedio);
+		BuscarPromedios(a^.hd,promedio);
 	end;
 end;
 	
@@ -189,4 +189,3 @@ BEGIN
 	readln(tope);
 	BuscarPromedios(a, tope);
 END.
-
