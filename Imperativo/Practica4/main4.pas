@@ -1,343 +1,233 @@
-program untitled;
-type
-	Rdia = 1..31;
-	Rmes= 1..12;
-	prestamo= record
-		numSocio: integer;
-		dia: Rdia;
-		mes: Rmes;
-		diasPrestados: integer;
-	end;
-	
-	datoArbolA= record
-		isbn:integer;
-		pres: prestamo;
-		end;
-	
-	arbol= ^nodoA;
-	nodoA = record
-		dato:datoArbolA;
-		HI:arbol;
-		HD: arbol;
-	end; 
-	
-	
-	listPres = ^nodoL;
-	nodoL= record
-		dato:prestamo;
-		sig: listPres;
-	end; 
-	
-	datoArbolB = record
-		isbn:integer;
-		prestamos:listPres;
-	end;
-	
-	arbolB = ^nodoB;
-	nodoB = record
-		dato:datoArbolB;
-		HI: arbolB;
-		HD: arbolB;
-	end;
-	
-	datoArbolC = record
-		isbn:integer;
-		cantPrestamo: integer;
-	end;
-	
-	arbolC = ^nodoC;
-	nodoC = record
-		dato:datoArbolC;
-		HI:arbolC;
-		HD:arbolC;
-	end;
-	
+{a. Almacenar los productos vendidos en una estructura eficiente para la búsqueda por código de producto. De cada producto deben quedar almacenados su código, la cantidad total de unidades vendidas y el monto total. De cada venta se cargan código de venta, código del producto vendido, cantidad de unidades vendidas y precio unitario. El ingreso de las ventas finaliza cuando se lee el código de venta 0.
+b. Imprimir el contenido del árbol ordenado por código de producto.
+c. Retornar el menor código de producto.
+d. Retornar la cantidad de códigos que existen en el árbol que son menores que un valor que se recibe como parámetro.
+e. Retornar el monto total entre todos los códigos de productos comprendidos entre dos valores recibidos (sin incluir) como parámetros.
 
+}
 
-procedure leerPrestamo(var p:prestamo;var isbn:integer);
-begin
-	writeln('ingrese el ISBN de libro');
-	readln(isbn);
-	if(isbn<> 0)then
-	begin
-		writeln('ingrese el numero de socio: ');
-		readln(p.numSocio);
-		writeln('ingrese el dia (1..31): ');
-		readln(p.dia);
-		writeln('ingrese el mes (1..12): ');
-		readln(p.mes);
-		writeln('ingrese la cantidad de dias prestados:  ');
-		readln(p.diasPrestados);
-	end;
+Program ImperativoClase4;
+
+type venta = record
+               codigoVenta: integer;
+               codigoProducto: integer;
+               cantUnidades: integer;
+               precioUnitario: real;
+             end;
+     productoVendido = record
+                         codigo: integer;
+                         cantTotalUnidades: integer;
+                         montoTotal: real;
+                       end;
+     arbol = ^nodoArbol;
+     nodoArbol = record
+                    dato: productoVendido;
+                    HI: arbol;
+                    HD: arbol;
+                 end;
+     
+procedure ModuloA (var a: arbol);
+{ Almacene los productos vendidos en una estructura eficiente para la búsqueda por código de producto. De cada producto deben quedar almacenados la cantidad total 
+de unidades vendidas y el monto total. }
+
+  Procedure CargarVenta (var v: venta);
+  begin
+    v.codigoVenta:= random (51) * 100;
+    If (v.codigoVenta <> 0)
+    then begin
+           v.codigoProducto:= random (100) + 1;
+           v.cantUnidades:= random(15) + 1;
+           v.precioUnitario:= (100 + random (100))/2;
+         end;
+  end;  
+  
+  Procedure InsertarElemento (var a: arbol; elem: venta);
+  var p: productoVendido;
+     
+     Procedure ArmarProducto (var p: productoVendido; v: venta);
+     begin
+       p.codigo:= v.codigoProducto;
+       p.cantTotalUnidades:= v.cantUnidades;
+       p.montoTotal:= v.cantUnidades * v.precioUnitario;
+     end;
+  
+  Begin
+    if (a = nil) 
+    then begin
+           new(a);
+           ArmarProducto (p, elem);
+           a^.dato:= p; 
+           a^.HI:= nil; 
+           a^.HD:= nil;
+         end
+    else if (elem.codigoProducto = a^.dato.codigo)
+         then begin
+                a^.dato.cantTotalUnidades:= a^.dato.cantTotalUnidades + elem.cantUnidades;
+                a^.dato.montoTotal:= a^.dato.montoTotal + (elem.cantUnidades * elem.precioUnitario);
+              end
+         else if (elem.codigoProducto < a^.dato.codigo) 
+              then InsertarElemento(a^.HI, elem)
+              else InsertarElemento(a^.HD, elem); 
+  End;
+
+var unaVenta: venta;  
+Begin
+ writeln;
+ writeln ('----- Ingreso de ventas y armado de arbol de productos ----->');
+ writeln;
+ a:= nil;
+ CargarVenta (unaVenta);
+ while (unaVenta.codigoVenta <> 0) do
+  begin
+   InsertarElemento (a, unaVenta);
+   CargarVenta (unaVenta);
+  end;
+ writeln;
+ writeln ('-----------------------------------------------');
+ writeln;
 end;
 
-procedure	insertarNodoA(var a:arbol; p:prestamo; isbn:integer);
+procedure ModuloB (a: arbol);
+{ Imprima el contenido del árbol ordenado por código de producto.}
+  procedure ImprimirArbol (a: arbol);
+  begin
+    if (a <> nil)
+    then begin
+          if (a^.HI <> nil) then ImprimirArbol (a^.HI);
+          writeln ('Codigo producto: ', a^.dato.codigo, ' cantidad unidades: ', a^.dato.cantTotalUnidades, ' monto total: ', a^.dato.montoTotal:2:2);
+          if (a^.HD <> nil) then ImprimirArbol (a^.HD);
+         end;
+  end;
+
 begin
-	if(a = nil) then
-	begin
-		new(a);
-		a^.dato.isbn:= isbn;
-		a^.dato.pres:= p;
-		a^.HI:= nil;
-		a^.HD:= nil;
-	end
-	else if(isbn < a^.dato.isbn) then
-			insertarNodoA(a^.HI, p,isbn)
-		 else
-			insertarNodoA(a^.HD, p,isbn);
+  writeln;
+  writeln ('----- Modulo B ----->');
+  writeln;
+  if ( a = nil) then writeln ('Arbol vacio')
+                else ImprimirArbol (a);
+  writeln;
+  writeln ('-----------------------------------------------');
+  writeln;
 end;
 
-procedure insertarNodoB(var a:arbolB; p:prestamo; isbn: integer);
+procedure ModuloC (a: arbol);
+{Retornar el menor código de producto.}
 
-	procedure CargarLista (var l : listPres; p:prestamo );
-	var
-		aux: listPres;
-	begin
-		new(aux);
-		aux^.dato:= p;
-		aux^.sig:= l;
-		l:= aux;
-	end;
-	
+  function ObtenerMinimo (a: arbol): integer;
+  begin
+    if (a = nil) 
+    then ObtenerMinimo:= 9999
+    else if (a^.HI = nil) then ObtenerMinimo:= a^.dato.codigo
+                          else ObtenerMinimo:= ObtenerMinimo (a^.HI)
+  end;
+   
+var menorCodigo: integer;
 begin
-	if(a=nil) then
-	begin
-		new(a);
-		a^.dato.isbn:= isbn;
-		a^.dato.prestamos:= nil;
-		CargarLista(a^.dato.prestamos, p);
-		a^.HI:= nil;
-		a^.HD:= nil;
-	end
-	else if(a^.dato.isbn =  isbn) then
-			CargarLista(a^.dato.prestamos, p)
-		else if(isbn < a^.dato.isbn) then
-				insertarNodoB(a^.HI, p,isbn)
-			 else
-				insertarNodoB(a^.HD, p,isbn);
-end;
-	
-procedure ArmarArboles(var a: arbol; var a2: arbolB);
-var
-	p:prestamo;
-	isbn : integer;
-begin
-	
-	leerPrestamo(p, isbn);
-	while(isbn<> 0) do
-	begin
-		insertarNodoA(a, p, isbn);
-		insertarNodoB(a2, p, isbn);
-		leerPrestamo(p, isbn);
-	end;
+  writeln;
+  writeln ('----- Modulo C ----->');
+  writeln;
+  write ('Menor codigo de producto: ');
+  writeln;
+  menorCodigo:= ObtenerMinimo (a);
+  if (menorCodigo = 9999) 
+  then writeln ('Arbol vacio')
+  else begin
+         writeln;
+         writeln ('El codigo menor es ', menorCodigo); 
+         writeln;
+       end;
+  writeln;
+  writeln ('-----------------------------------------------');
+  writeln;
 end;
 
-procedure  IsbnMasGrande(a:arbol);
-	
-	procedure actulizarMaximo(a:arbol; var isbnMax: integer);
-	begin
-		if(a<>nil) then
-		begin
-			if(a^.dato.isbn > isbnMax) then
-				isbnMax:=a^.dato.isbn;
-				
-			actulizarMaximo(a^.HI, isbnMax);
-			actulizarMaximo(a^.HD, isbnMax);
-		end;
-	end;
-	
-var
-	isbnMax:integer;
+procedure ModuloD (a: arbol);
+{ Retornar la cantidad de códigos que existen en el árbol que son menores que un valor que se recibe como parámetro }
+  function CantidadDeCodigosMenores (a: arbol; cod: integer): integer;
+
+  begin
+		if (a = nil) then
+			CantidadDeCodigosMenores:=  0
+		else  if (a^.dato.codigo < cod) then
+				CantidadDeCodigosMenores:= 1 + CantidadDeCodigosMenores(a^.HI,cod) + CantidadDeCodigosMenores(a^.HD,cod)
+			  else 
+				CantidadDeCodigosMenores:= CantidadDeCodigosMenores(a^.HI,cod);
+  end;
+   
+var cantidad, unCodigo: integer;
 begin
-	isbnMax:= -1;
-	actulizarMaximo(a,isbnMax);
-	writeln('----------------------------------');
-	writeln('el ISBN mas grande es: ', isbnMax);
-	writeln('----------------------------------');
+  writeln;
+  writeln ('----- Modulo D ----->');
+  writeln;
+  write ('Ingresar un codigo: ');
+  readln (unCodigo);
+  cantidad:= CantidadDeCodigosMenores (a, unCodigo);
+  writeln;
+  writeln ('La cantidad de codigos menores al codigo ', unCodigo, ' es: ', cantidad);
+  writeln;
+  writeln;
+  writeln ('-----------------------------------------------');
+  writeln;
 end;
 
-procedure IsbnMasChico(a2:arbolB);
-	procedure actulizarMinimo(a2:arbolB; var isbnMin: integer);
-	begin
-		if(a2<>nil) then
-		begin
-			if(a2^.dato.isbn < isbnMin) then
-				isbnMin:=a2^.dato.isbn;
-				
-			actulizarMinimo(a2^.HI, isbnMin);
-			actulizarMinimo(a2^.HD, isbnMin);
-		end;
-	end;
-var
-	isbnMin:integer;
-begin
-	isbnMin:= 999;
-	actulizarMinimo(a2,isbnMin);
-	writeln('----------------------------------');
-	writeln('el ISBN mas chico es: ', isbnMin);
-	writeln('----------------------------------');
-end;
-
-procedure CantidadPrestamoS(a:arbol);
-
-	procedure ContarPrestamos(a:arbol; nroS:integer;var cantTotal:integer);
-	begin
-		if(a<>nil)then
-		begin
-			if(a^.dato.pres.numSocio = nroS) then
-				cantTotal:= cantTotal+1;
-			ContarPrestamos(a^.HI,nros,cantTotal);
-			ContarPrestamos(a^.HD,nros,cantTotal);
-		end;
-		
-	end;
-	
-var
-	nroS:integer;
-	cantTotal:integer;
-begin
-	cantTotal:=0;
-	writeln('ingrese el numero de socio: ');
-	readln(nroS);
-	ContarPrestamos(a,nroS, cantTotal);
-	writeln('-------------------------------------------------------------------');
-	writeln;
-	writeln('la cantidad de prestamos del socio ', nroS ,' es: ', cantTotal);
-	writeln;
-	writeln('-------------------------------------------------------------------');
-end;
-
-procedure CantidadPrestamoSV2(a2:arbolB);
-	
-	procedure BuscarEnLista(l:listPres; nros:integer;var cantTotal:integer);
-	begin
-		if(l<>nil) then
-		begin
-			 if(l^.dato.numSocio = nros) then
-				cantTotal:= cantTotal+1;
-			BuscarEnLista(l^.sig, nros,cantTotal);
-		end;
-	end;
-
-	procedure ContarPrestamosV2(a2:arbolB;nroS:integer; var cantTotal:integer);
-	begin
-		if(a2<>nil)then
-		begin
-			 BuscarEnLista(a2^.dato.prestamos, nros, cantTotal);
-			 ContarPrestamosV2(a2^.HI, nroS, cantTotal);
-			 ContarPrestamosV2(a2^.HD, nroS, cantTotal);
-		end;
-	end;
-	
-var
-	nroS:integer;
-	cantTotal:integer;
-begin
-	cantTotal:=0;
-	writeln('ingrese el numero de socio: ');
-	readln(nroS);
-	ContarPrestamosV2(a2,nroS, cantTotal);
-	writeln('-------------------------------------------------------------------');
-	writeln;
-	writeln('la cantidad de prestamos del socio V2 ', nroS ,' es: ', cantTotal);
-	writeln;
-	writeln('-------------------------------------------------------------------');
-end;
-
-
-procedure ArmarArbolC (a:arbol; var a3:arbolC) ;
-	
-	procedure insertarNodoC( dato: datoArbolA;var cant:integer;var a3:arbolC );
-	begin
-		if(a3=nil) then
-		begin
-			new(a3);
-			a3^.dato.isbn:= dato.isbn;
-			a3^.dato.cantPrestamo:= 1;
-		end
-		else if(a3^.dato.isbn = dato.isbn) then
-					a3^.dato.cantPrestamo:=a3^.dato.cantPrestamo+ 1
-			else if (dato.isbn < a3^.dato.isbn) then
-					insertarNodoC(dato, cant, a3^.HI)
-				else
-					insertarNodoC(dato, cant, a3^.HD);
-	end;
-var
-	cant:integer;
-begin
-	if(a<> nil) then
-	begin
-		insertarNodoC(a^.dato,cant, a3);
-		ArmarArbolC(a^.HI, a3);
-		ArmarArbolC(a^.HD, a3);
-	end;
-end;
-
-procedure ArmarArbolD(a:arbolB; var a4: arbolC);
-
-	function ContarISBNprestamo( l: listPres):integer;
-	begin	
-			if(l=nil) then ContarISBNprestamo:= 0
+procedure ModuloE (a: arbol);
+{ Contenga un módulo que reciba la estructura generada en el punto a y dos códigos de producto y retorne el monto total entre todos los códigos de productos 
+comprendidos entre los dos valores recibidos (sin incluir). }
+  
+  function ObtenerMontoTotalEntreDosCodigos (a: arbol; codigo1, codigo2: integer): real;
+  begin
+    { COMPLETAR } {dos opciones o buscas el codigo1 y de ahi iteras todos los montos totales hasta el codigo2  | recorrer todos hasta encontrar un codigo que este en ese rango}
+		if(a = nil) then
+			ObtenerMontoTotalEntreDosCodigos:= 0
+		else if  (a^.dato.codigo > codigo1)then
+			begin
+				if(a^.dato.codigo < codigo2) then
+					ObtenerMontoTotalEntreDosCodigos:= ObtenerMontoTotalEntreDosCodigos(a^.HI, codigo1, codigo2) + ObtenerMontoTotalEntreDosCodigos(a^.HD, codigo1, codigo2)
+												+ a^.dato.MontoTotal
+				else 
+					ObtenerMontoTotalEntreDosCodigos:= ObtenerMontoTotalEntreDosCodigos(a^.HI, codigo1, codigo2)
+			end
 			else
-				ContarISBNprestamo:= ContarISBNprestamo(l^.sig)+1;	
-	end;
-	procedure  insertarNodoD(var a4: arbolC; dato: datoArbolB);
-	begin
-		if(a4 = nil) then
-		begin
-			new(a4);
-			a4^.dato.isbn:= dato.isbn;
-			a4^.dato.cantPrestamo:= ContarISBNprestamo(dato.prestamos);
-		end
-		else if (dato.isbn < a4^.dato.isbn) then
-				insertarNodoD(a4^.HI, dato)
-			else
-				insertarNodoD(a4^.HD, dato);
-	end;
-
+				ObtenerMontoTotalEntreDosCodigos(a^.HD, codigo1, codigo2);
+				
+				
+				
+			 
+  end;
+   
+var codigo1, codigo2: integer;
+    montoTotal: real;
 begin
-		if(a<> nil) then
-		begin
-			 insertarNodoD(a4, a^.dato);
-			 ArmarArbolD(a^.HI, a4);
-			 ArmarArbolD(a^.HD, a4);
-		end;
+  writeln;
+  writeln ('----- Modulo E ----->');
+  writeln;
+  write ('Ingrese primer codigo de producto: ');
+  readln (codigo1);
+  write ('Ingrese segundo codigo de producto (mayor al primer codigo): ');
+  readln (codigo2);
+  writeln;
+  montoTotal:= ObtenerMontoTotalEntreDosCodigos (a, codigo1, codigo2);
+  if (montoTotal = 0) 
+  then writeln ('No hay codigos entre ', codigo1, ' y ', codigo2)
+  else begin
+         writeln;
+         writeln ('El monto total entre el codigo', codigo1, ' y el codigo : ', codigo2, ' es: ', montoTotal :5:0); 
+         writeln;
+       end;
+  writeln;
+  writeln ('-----------------------------------------------');
+  writeln;
 end;
 
-
-
-procedure MostrarArbolD(a4:arbolC);
-begin 
-	if(a4<>nil) then
-	begin
-		writeln('isbn: ', a4^.dato.isbn, ' cantidad de prestamos ',a4^.dato.cantPrestamo);
-		MostrarArbolD(a4^.HI);
-		MostrarArbolD(a4^.HD);
-	end;
-end;
-var 
-	a: arbol;
-	a2: arbolB;
-	a3: arbolC;
-	a4: arbolC;
-BEGIN
-	a:= nil;
-	a2:= nil;
-	a3:= nil;
-	a4:= nil;
-	ArmarArboles(a,a2);
-	IsbnMasGrande(a);
-	writeln;
-	IsbnMasChico(a2);
-	writeln;
-	CantidadPrestamoS(a);
-	writeln;
-	CantidadPrestamoSV2(a2);
-	writeln;
-	ArmarArbolC (a, a3);
-	ArmarArbolD(a2, a4);
-	MostrarArbolD(a4);
-	writeln;
-
-END.
+var a: arbol; 
+Begin
+  randomize;
+  ModuloA (a);
+  ModuloB (a);
+  ModuloC (a);
+  
+  ModuloD (a);
+  ModuloE (a);
+    
+End.
 
