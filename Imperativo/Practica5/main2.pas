@@ -180,30 +180,37 @@ begin
 	writeln('la cantidad es de la marca: ', marcaB, ' es de: ',cantM);
 end;
 
-{procedure DatosOrdenadosAnio(a:arbol;var a3:arbol);	
-	procedure insertoNodo(var a3: arbol; a:arbol);
-	begin
-		if(a3 = nil) then
+procedure DatosOrdenadosAnio(a:arbol;var l:listAutos);
+		procedure insertarOrdenado(a:datoArbol; var l:listAutos);
+		var
+			aux,act,ant: listAutos;
 		begin
-			new(a3);
-			a3:= a;
-			a3^.hi:= nil;
-			a3^.hd:= nil;
-		end
-		else if(a^.dato.anio <= a3^.dato.anio) then
-				insertoNodo( a3^.hi, a)
+			new(aux);
+			aux^.dato.patente:= a.patente;
+			aux^.dato.anio:= a.anio;
+			aux^.dato.modelo:= a.modelo;
+			aux^.sig:= nil;
+			act:= l;
+			ant:= act;
+			while(act <> nil) and (act^.dato.anio < a.anio) do
+			begin
+				ant:= act;
+				act:= act^.sig;
+			end;
+			if(act=ant) then l:= aux
 			else
-				insertoNodo( a3^.hd, a);
-		
-	end;
+				ant^.sig:=aux;
+			aux^.sig:=act;
+		end;
+
 begin
-	if (a<> nil) then
+	if(a<> nil) then
 	begin
-		insertoNodo(a3, a);
-		DatosOrdenadosAnio(a^.hi,a3);
-		DatosOrdenadosAnio(a^.hd, a3);
+		insertarOrdenado(a^.dato, l);
+		DatosOrdenadosAnio(a^.hi ,l);
+		DatosOrdenadosAnio(a^.hd ,l);
 	end;
-end;}
+end;
 
 procedure BuscarPatente(a: arbol);
 
@@ -246,6 +253,7 @@ end;
 
 var 
 	a: arbol; a2:arbolB;
+	listaOrdenada: listAutos;
 BEGIN
 	ArmarArbol(a, a2);
 	writeln;
@@ -253,8 +261,7 @@ BEGIN
 	writeln;
 	CantidadMarcaV2(a2);
 	writeln;
-	{DatosOrdenadosAnio(a, a3);	}
+	DatosOrdenadosAnio(a, listaOrdenada);	
 	BuscarPatente(a);
 	MostarArbol(a);
 END.
-
