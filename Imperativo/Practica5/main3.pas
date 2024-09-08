@@ -1,6 +1,6 @@
 program untitled;
 const
-	maxRubro = 1;
+	maxRubro = 10;
 type
 	Rrubro  = 1..maxRubro;
 	producto = record
