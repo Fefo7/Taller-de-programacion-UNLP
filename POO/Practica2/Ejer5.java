@@ -1,4 +1,5 @@
 
+
 package tema2;
 
     import PaqueteLectura.Lector;
@@ -23,7 +24,9 @@ public class Ejer5 {
         
         
         for (int j = 0; j < i; j++) {
-            System.out.println(Partidos[j].versus());
+            System.out.println(Partidos[j].getLocal() + " - " + Partidos[j].getGolesLocal() +
+                    " vs " + Partidos[j].getVisitante() + " - " + Partidos[j].getGolesVisitante());
+            
             if(Partidos[j].getGanador().equals("river"))
             {
                 cantRiver++;
@@ -62,14 +65,3 @@ public class Ejer5 {
 }
 
 
-
-
-/* este metodo agregar en la clase partido para mostrar los versusu*/
-/*
-  
-    public String versus ()
-    {
-        return local+ " - " + golesLocal + " VS " + visitante + " - " + golesVisitante; 
-    }
-    
-*/
