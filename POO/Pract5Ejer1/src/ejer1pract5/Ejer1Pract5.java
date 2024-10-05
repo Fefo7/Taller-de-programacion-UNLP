@@ -24,7 +24,7 @@ public class Ejer1Pract5 {
         
         Subsidio sub = new Subsidio(300.000,"por que no?");
         Subsidio sub2= new Subsidio(350.000,"por que si");
-        sub2.isOtorgado();
+        sub2.otorgarSub();
         
         inv1.agregarSubsidio(sub);
         inv1.agregarSubsidio(sub2);

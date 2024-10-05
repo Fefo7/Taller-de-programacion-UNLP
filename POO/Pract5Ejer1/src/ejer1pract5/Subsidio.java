@@ -41,6 +41,20 @@ public class Subsidio {
     public boolean otorgarSub() {
         return this.otorgado = true;
     }
+
+	@Override
+	public String toString() {
+		String aux = getMotivo() + " " + getMonto() ;
+		if(isOtorgado())
+		{
+			aux += "Se otorgo";
+		}
+		else 
+		{
+			aux += "No otorgo";
+		}
+		return super.toString(); //To change body of generated methods, choose Tools | Templates.
+	}
     
     
     

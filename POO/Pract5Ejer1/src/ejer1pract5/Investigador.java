@@ -47,7 +47,13 @@ public class Investigador {
 
 
     public void setCategoria(int categoria) {
-        this.categoria = categoria;
+		
+		
+		if(categoria <= 5)
+		{
+			this.categoria = categoria;
+		}
+		
     }
 
     public String getEspecialidad() {
@@ -78,6 +84,15 @@ public class Investigador {
        }
        return acumulador;
    }
+
+	@Override
+	public String toString() {
+		String aux = "\n" + getNombre() 
+            + " " + getEspecialidad()
+            + " " + dineroTotalOtorgado();
+		return aux; 
+	}
+  
    
     
     

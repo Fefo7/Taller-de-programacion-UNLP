@@ -84,7 +84,7 @@ public class Proyecto {
            for (int j = 0; j < investigadores[pos].getDimL(); j++) {
                if(!investigadores[pos].getSubsidios()[j].isOtorgado())
                {
-                   System.out.println(investigadores[pos].getSubsidios()[j].getMotivo());
+                   System.out.println(investigadores[pos].getSubsidios()[j].toString());
                }
            }
            
@@ -107,10 +107,7 @@ public class Proyecto {
         String aux = " " +  nombre + " "+ code + " " +nombreCompDirector + " "+ obtenerMontototal();
         
         for (int i = 0; i < dimL; i++) {
-            aux = aux + "\n" + investigadores[i].getNombre() 
-            +investigadores[i].getCategoria() 
-            + investigadores[i].getEspecialidad()
-            + investigadores[i].dineroTotalOtorgado();
+            aux = aux + "\n" + investigadores[i].toString();
         }
         
         return aux; 
