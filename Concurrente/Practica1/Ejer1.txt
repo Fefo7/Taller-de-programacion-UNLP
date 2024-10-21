@@ -1,0 +1,47 @@
+
+programa ejemplo
+procesos
+  proceso juntarFlores(ES flor: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina 
+      tomarFlor
+      flor:= flor +1
+  fin
+  proceso recorrerAvenida
+  variables
+    flores: numero
+  comenzar
+    flores:= 0
+    repetir 99
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+    Informar(flores)
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  comenzar
+    recorrerAvenida
+  fin
+  robot robot2
+  comenzar
+    recorrerAvenida
+  fin
+  robot robot3
+  comenzar
+    recorrerAvenida
+  fin
+variables
+  R_info: robot1
+  R_info2:robot2
+  R_info3:robot3
+comenzar
+  AsignarArea(R_info, ciudad)
+  AsignarArea(R_info2, ciudad)
+  AsignarArea(R_info3, ciudad)
+  Iniciar(R_info, 1,1)
+  Iniciar(R_info2, 3,1)
+  Iniciar(R_info3, 5,1)
+fin
