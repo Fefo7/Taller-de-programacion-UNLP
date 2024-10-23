@@ -1,0 +1,63 @@
+
+
+programa ejemplo
+procesos
+  proceso juntarPapeles(ES flor: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      flor:= flor +1
+  fin
+  proceso recorrerAvenida
+  variables 
+    papeles: numero
+  comenzar
+    papeles:= 0
+    repetir 29
+      juntarPapeles(papeles)
+      mover
+    juntarPapeles(papeles)
+    Informar(papeles)
+  fin
+areas
+  a1: AreaP (10,11,10,40)
+  a2: AreaP (11,40,40,40)
+  a3: AreaP (40,10,40,40)
+  a4: AreaP (10,10,39,10)
+robots
+  robot robot1
+  comenzar
+    recorrerAvenida
+  fin
+  robot robot2
+  comenzar
+    derecha
+    recorrerAvenida
+  fin
+  robot robot3
+  comenzar
+    repetir 2
+      derecha
+    recorrerAvenida
+  fin
+  robot robot4
+  comenzar
+    repetir 3
+      derecha
+    recorrerAvenida
+  fin
+variables
+  r1: robot1
+  r2: robot2
+  r3: robot3
+  r4: robot4
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a2)
+  AsignarArea(r3, a3)
+  AsignarArea(r4, a4)
+  Iniciar(r1, 10,11)
+  Iniciar(r2, 11,40)
+  Iniciar(r3, 40,39)
+  Iniciar(r4, 39,10)
+fin
