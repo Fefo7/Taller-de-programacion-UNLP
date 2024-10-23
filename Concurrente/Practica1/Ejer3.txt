@@ -1,0 +1,55 @@
+
+programa ejemplo
+procesos
+  proceso juntarFlores(ES cantFlor: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cantFlor := cantFlor + 1 
+    mientras HayFlorEnLaBolsa
+      depositarFlor
+  fin
+  proceso hacerEscalon(E long: numero; ES cantFlor: numero)
+  comenzar
+    repetir long
+      juntarFlores(cantFlor)
+      mover
+    derecha
+    repetir long
+      juntarFlores(cantFlor)
+      mover
+    repetir 3
+      derecha
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    i: numero
+    cantF: numero
+    cantEsca: numero
+  comenzar
+    i:= 1
+    cantF:= 0
+    cantEsca:=0
+    repetir 4
+      hacerEscalon(i,cantF)
+      si cantF > 1 
+        cantEsca:= cantEsca +1
+      cantF:= 0
+      i:= i+1
+    Informar(cantEsca)
+  fin
+variables
+  r1: robot1
+  r2: robot1
+  r3: robot1
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r3, ciudad)
+  Iniciar(r1, 12,14)
+  Iniciar(r2, 17,10)
+  Iniciar(r3, 22,6)
+fin
