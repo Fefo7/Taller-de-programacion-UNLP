@@ -1,0 +1,69 @@
+programa ejemplo
+procesos
+  proceso juntarFlores(ES cant: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      cant:= cant +1
+      tomarFlor
+  fin
+  proceso recorrerAvenida(ES flores: numero)
+  comenzar
+    flores:= 0
+    repetir 9
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    flores: numero
+    id: numero
+  comenzar
+    id:= 1
+    recorrerAvenida(flores)
+    EnviarMensaje(id,fiscal )
+    EnviarMensaje(flores,fiscal )
+  fin
+  robot robot2
+  variables
+    flores: numero
+    id: numero
+  comenzar
+    id:= 2
+    recorrerAvenida(flores)
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(flores,fiscal)
+  fin
+  robot robot3
+  variables
+    florR1: numero
+    florR2: numero
+    quienEs: numero
+  comenzar
+    repetir 2
+      RecibirMensaje(quienEs,*)
+      si quienEs = 1
+        RecibirMensaje(florR1, r1)
+      sino
+        RecibirMensaje(florR2, r2)
+    si florR1 > florR2
+      Informar(florR1 - florR2)
+    sino
+      Informar(florR2 - florR1)
+  fin
+ 
+variables
+  r1: robot1
+  r2: robot2
+  fiscal: robot3
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(fiscal, ciudad)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2,11)
+  Iniciar(fiscal, 2,1)
+fin
