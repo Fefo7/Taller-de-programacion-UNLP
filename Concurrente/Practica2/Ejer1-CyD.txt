@@ -1,0 +1,102 @@
+programa ejemplo
+procesos
+  proceso juntarFlores(ES cant: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      cant:= cant +1
+      tomarFlor
+  fin
+  proceso recorrerAvenida(ES flores: numero)
+  comenzar
+    flores:= 0
+    repetir 9
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+  fin
+  proceso  ActualizarMaximo(E florR: numero; E quienEs: numero ; ES max: numero;ES id:numero)
+  comenzar
+    si florR > max
+      max:= florR
+      id:= quienEs
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    flores: numero
+    quienSoy: numero
+  comenzar
+    recorrerAvenida(flores)
+    RecibirMensaje(quienSoy, fiscal)
+    EnviarMensaje(quienSoy,fiscal )
+    EnviarMensaje(flores,fiscal )
+  fin
+ 
+  robot robot2
+  variables
+    florR: numero
+    max: numero
+    quienEs: numero
+    id: numero
+  comenzar
+    max:= -1
+    id:=0
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)  
+    EnviarMensaje(3, r3)  
+    EnviarMensaje(4, r4)  
+    EnviarMensaje(5, r5)  
+    EnviarMensaje(6, r6)  
+    repetir 6
+      RecibirMensaje(quienEs,*)
+      si quienEs = 1
+        RecibirMensaje(florR, r1)
+        ActualizarMaximo(florR, quienEs,max, id) 
+      sino
+        si quienEs = 2
+          RecibirMensaje(florR, r2)
+          ActualizarMaximo(florR, quienEs,max, id) 
+        sino
+          si quienEs = 3
+            RecibirMensaje(florR, r3)
+            ActualizarMaximo(florR, quienEs,max, id) 
+          sino
+            si quienEs = 4
+              RecibirMensaje(florR, r4)
+              ActualizarMaximo(florR, quienEs,max, id) 
+            sino
+              si quienEs = 5
+                RecibirMensaje(florR, r5)
+                ActualizarMaximo(florR, quienEs,max, id) 
+              sino
+                RecibirMensaje(florR, r6)
+                ActualizarMaximo(florR, quienEs,max, id)   
+    Informar(id,max)
+  fin
+ 
+variables
+  r1: robot1
+  r2: robot1
+  r3: robot1
+  r4: robot1
+  r5: robot1
+  r6: robot1
+  fiscal: robot2
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r3, ciudad)
+  AsignarArea(r4, ciudad)
+  AsignarArea(r5, ciudad)
+  AsignarArea(r6, ciudad)
+  AsignarArea(fiscal, ciudad)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2,11)
+  Iniciar(r3, 3,21)
+  Iniciar(r4, 4,31)
+  Iniciar(r5, 5,41)
+  Iniciar(r6, 6,51)
+  Iniciar(fiscal, 2,1)
+fin
