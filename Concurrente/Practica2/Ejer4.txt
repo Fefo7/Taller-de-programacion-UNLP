@@ -1,0 +1,154 @@
+programa ejemplo
+procesos
+  proceso EncontrarGanador(E punR1:numero;E punR2:numero;E punR3: numero;E punR4: numero; ES ganador: numero)
+  variables
+    max: numero
+    ganaste: boolean
+  comenzar
+    max:= -1
+    ganaste:= V
+    si punR1> max
+      max:= punR1 
+      ganador:= 1
+    si punR2> punR1
+      max:= punR2 
+      ganador:= 2
+    si punR3> punR2
+      max:= punR3
+      ganador:= 3
+    si punR4> punR3
+      max:= punR3
+      ganador:= 4
+    si NuevoJuntador = 1
+      EnviarMensaje(ganaste, r1)
+    sino
+      si NuevoJuntador = 2 
+        EnviarMensaje(ganaste, r2)
+      sino
+        si NuevoJuntador = 3
+          EnviarMensaje(ganaste, r3)
+        sino
+          EnviarMensaje(ganaste, r4)    
+           
+  fin
+  proceso inicializarPuntajes(ES punR1:numero;ES punR2:numero;ES punR3: numero;ES punR4: numero)
+  comenzar
+    punR1:=0
+    punR2:=0
+    punR3:=0
+    punR4:=0
+  fin
+  proceso juntarFloresYPapeles(ES totalRecolectado: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      totalRecolectado:= totalRecolectado +1
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      totalRecolectado:= totalRecolectado +1
+  fin
+  proceso calcularPosicion
+  variables
+    av,ca: numero
+  comenzar
+    Random(av,25,75)
+    Random(ca,25,75)
+    Pos(av,ca)
+    mientras ~(HayFlorEnLaEsquina) & ~(HayPapelEnLaEsquina)
+      Random(av,25,75)
+      Random(ca,25,75)
+      Pos(av,ca)
+  fin
+  proceso asignarIdrobots
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+  fin
+ 
+areas
+  ciudad: AreaC (1,1,40,2)
+  areaReco:AreaPC(25,25,75,75)
+robots
+  robot robot1
+  variables
+    NuevoJuntador:numero
+    teToca:boolean
+    totalAux:numero
+    punR1,punR2,punR3, punR4:numero
+  comenzar
+    teToca:= V
+    inicializarPuntajes(punR1,punR2,punR3, punR4)
+    asignarIdrobots
+    repetir 10
+      Random(NuevoJuntador,1,4)
+      si NuevoJuntador = 1
+        EnviarMensaje(teToca, r1)
+        RecibirMensaje(totalAux, r1)
+        punR1:= punR1 + totalAux
+      sino
+        si NuevoJuntador = 2 
+          EnviarMensaje(teToca, r2)
+          RecibirMensaje(totalAux, r2)
+          punR2:= punR2 + totalAux
+        sino
+          si NuevoJuntador = 3
+            EnviarMensaje(teToca, r3)
+            RecibirMensaje(totalAux, r3)
+            punR3:= punR3 + totalAux
+          sino
+            EnviarMensaje(teToca, r4)    
+            RecibirMensaje(totalAux, r4)
+            punR4:= punR4 + totalAux   
+    EncontrarGanador(punR1,punR2,punR3, punR4)
+  fin
+  robot robot2
+  variables
+    quienSoy: numero
+    totalJuntado: numero
+    meToca,gane:boolean
+  comenzar
+    totalJuntado:= 0
+    RecibirMensaje(quienSoy, fiscal)
+    RecibirMensaje(meToca, fiscal)
+    si meToca
+      calcularPosicion
+      juntarFloresYPapeles(totalJuntado)
+      EnviarMensaje(totalJuntado,fiscal)
+    si quienSoy = 1
+      Pos(25,1)
+    sino
+      si quienSoy = 2 
+        Pos(30,1)
+      sino
+        si quienSoy = 3
+          Pos(35,1)
+        sino  
+          Pos(40,1)
+    RecibirMensaje(gane, fiscal)
+    si gane
+      Pos(50,50)       
+  fin
+variables
+  fiscal: robot1
+  r1:robot2
+  r2:robot2
+  r3:robot2
+  r4:robot2
+comenzar
+  AsignarArea(fiscal, ciudad)
+  AsignarArea(r1, ciudad)
+  AsignarArea(r1, areaReco)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r2, areaReco)
+  AsignarArea(r3, ciudad)
+  AsignarArea(r3, areaReco)
+  AsignarArea(r4, ciudad)
+  AsignarArea(r4, areaReco)
+  Iniciar(fiscal, 1,1)
+  Iniciar(r1, 25,1)
+  Iniciar(r2, 30,1)
+  Iniciar(r3, 35,1)
+  Iniciar(r4, 40,1)
+fin

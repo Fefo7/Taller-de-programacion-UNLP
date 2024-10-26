@@ -1,0 +1,113 @@
+programa ejemplo
+procesos
+  proceso juntarPapeles(ES papeles: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles:= papeles +1
+  fin
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores +1
+  fin
+  proceso recorrerCalleF(E iteraciones:numero; ES flor: numero)
+  comenzar
+    repetir iteraciones
+      juntarFlores(flor)
+      mover
+    juntarFlores(flor)
+  fin
+  proceso recorrerCalleP(E iteraciones:numero; ES papel: numero)
+  comenzar
+    repetir iteraciones
+      juntarPapeles(papel)
+      mover
+    juntarPapeles(papel)
+  fin
+areas
+  areaA1: AreaP(1,1,10,1)
+  areaA2: AreaP(11,1,20,1)
+  areaA1p2: AreaP(21,1,30,1)
+  areaA2p2: AreaP(31,1,40,1)
+  areaB1: AreaP(1,5,10,5)
+  areaB2: AreaP(11,5,20,5)
+  areaB1p2: AreaP(21,5,30,5)
+  areaB2p2: AreaP(31,5,40,5)
+robots
+  robot pape1
+  variables
+    papel: numero
+    ok: boolean
+  comenzar
+    derecha
+    papel:=0
+    recorrerCalleP(9,papel)
+    EnviarMensaje(papel, A2)
+    RecibirMensaje(papel,A2)
+    Pos(21,1)
+    recorrerCalleP(9,papel)
+    EnviarMensaje(papel, A2)
+  fin
+  robot pape2
+  variables
+    papel: numero
+  comenzar
+    derecha
+    RecibirMensaje(papel, A1)
+    recorrerCalleP(9,papel)
+    EnviarMensaje(papel, A1)
+    RecibirMensaje(papel, A1)
+    Pos(31,1)
+    recorrerCalleP(9,papel)
+    Informar('cantidad de flores ', papel)
+  fin
+  robot flo1
+  variables
+    flor: numero
+  comenzar
+    flor:=0
+    derecha
+    recorrerCalleF(9,flor)
+    EnviarMensaje(flor, B2)
+    RecibirMensaje(flor, B2)
+    Pos(21,5)
+    recorrerCalleF(9,flor)
+    EnviarMensaje(flor, B2)
+    
+    
+  fin
+  robot flo2
+  variables
+    flor: numero
+  comenzar
+    derecha
+    RecibirMensaje(flor, B1)
+    recorrerCalleF(9,flor)
+    EnviarMensaje(flor, B1)
+    RecibirMensaje(flor, B1)
+    Pos(31,5)
+    recorrerCalleF(9,flor)
+    Informar('cantidad de papeles ', flor)
+  fin
+  
+variables
+  A1: pape1
+  A2: pape2
+  B1: flo1
+  B2: flo2
+comenzar
+  AsignarArea(A1, areaA1)
+  AsignarArea(A1, areaA1p2)
+  AsignarArea(A2, areaA2)
+  AsignarArea(A2,areaA2p2)
+  AsignarArea(B1,areaB1)
+  AsignarArea(B1,areaB1p2)
+  AsignarArea(B2, areaB2)
+  AsignarArea(B2,areaB2p2)
+  Iniciar(A1, 1,1)
+  Iniciar(A2, 11,1)
+  Iniciar(B1, 1,5)
+  Iniciar(B2, 11,5)
+fin
