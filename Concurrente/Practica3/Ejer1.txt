@@ -26,8 +26,12 @@ procesos
       mover
   fin
 areas
-  a3C: AreaC(6,10,11,11)
+  a3C: AreaC(10,10,10,10)
   a1F: AreaPC (1,1,5,10)
+  ap1: AreaP(6,10,6,10)
+  ap2: AreaP(7,10,7,10)
+  ap3: AreaP(8,10,8,10)
+  ap4: AreaP(9,10,9,10)
   a2P: AreaPC(6,1,10,9)
 robots
   robot florero
@@ -81,12 +85,16 @@ variables
 comenzar
   AsignarArea(r1F, a1F)
   AsignarArea(r1F, a3C)
+  AsignarArea(r1F, ap1)
   AsignarArea(r2F, a1F)
   AsignarArea(r2F, a3C)
+  AsignarArea(r2F, ap2)
   AsignarArea(r3P, a2P)
   AsignarArea(r3P, a3C)
+  AsignarArea(r3P, ap3)
   AsignarArea(r4P, a2P)
   AsignarArea(r4P, a3C)
+  AsignarArea(r4P, ap4)
   Iniciar(r1F, 6,10)
   Iniciar(r2F, 7,10)  
   Iniciar(r3P, 8,10)
