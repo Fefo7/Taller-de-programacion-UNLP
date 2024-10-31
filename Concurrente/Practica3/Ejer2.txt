@@ -1,0 +1,173 @@
+programa ejemplo
+procesos
+  proceso juntaFlores(ES flores: numero )
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores +1
+  fin
+  proceso juntaPapeles(ES papeles: numero )
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles:= papeles +1
+  fin
+  proceso rotar
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso recorrido1Flores(ES flores:numero)
+  variables
+    i:numero
+  comenzar
+    i:= 5
+    repetir 4
+      repetir i
+        mover
+      juntaFlores(flores) 
+      derecha
+      repetir i
+        mover
+      juntaFlores(flores)
+      rotar  
+      i:= i-1
+     
+  fin
+  proceso recorrido2Flores(ES flores: numero)
+  variables
+    i: numero
+  comenzar
+    i:= 2 
+    repetir 4
+      repetir i
+        mover
+      juntaFlores(flores) 
+      derecha
+      repetir i
+        mover
+      juntaFlores(flores) 
+      rotar
+      i:= i+1
+  fin
+  proceso hacerRecorridoC1
+  variables
+    i,flores: numero
+    gane: numero
+    termine: boolean
+  comenzar
+    flores:= 0
+    termine:= V
+    recorrido1Flores(flores)
+    mover
+    derecha
+    BloquearEsquina(16,16)
+    mover
+    gane:= 1
+    EnviarMensaje(gane,fiscal)
+    repetir 2
+      derecha
+    mover
+    LiberarEsquina(16,16)
+    recorrido2Flores(flores)
+    EnviarMensaje(termine, fiscal)
+    Informar(flores)
+  fin
+  proceso  recorrido1Papeles(ES papeles: numero)
+  variables
+    i: numero
+  comenzar
+    i:= 5
+    repetir 4
+      repetir i
+        mover
+      juntaPapeles(papeles)
+      rotar
+      repetir i
+        mover 
+      juntaPapeles(papeles)
+      derecha
+      i:= i-1  
+  fin
+  proceso  recorrido2Papeles(ES papeles: numero)
+  variables
+    i:numero
+  comenzar
+    i:= 2
+    repetir 4
+      repetir i
+        mover
+      juntaPapeles(papeles)
+      rotar
+      repetir i
+        mover
+      derecha
+      juntaPapeles(papeles)
+      i:= i+1
+  fin
+  proceso hacerRecorridoC2
+  variables
+    i,papeles: numero
+    gane: numero
+    termine: boolean
+  comenzar
+    papeles:= 0
+    termine:= V
+    recorrido1Papeles(papeles)
+    mover
+    rotar
+    BloquearEsquina(16,16)
+    mover
+    gane:= 2
+    EnviarMensaje(gane,fiscal)
+    repetir 2
+      derecha
+    mover
+    LiberarEsquina(16,16)
+    recorrido2Papeles(papeles)
+    EnviarMensaje(termine, fiscal)
+    Informar(papeles)
+  fin
+  
+areas
+  ar1: AreaP (1,1,14,30)
+  ar12: AreaP(15,2,15,30)
+  ar2: AreaP (17,1,31,30)
+  arF: AreaP (15,1,15,1)
+  meta: AreaPC(16,16,16,16)
+robots
+  robot robot1
+  comenzar
+    hacerRecorridoC1
+  fin
+  robot robot2
+  comenzar
+    hacerRecorridoC2
+  fin
+  robot ficalizador
+  variables
+    ganador: numero
+    perdedor: numero
+    termino: boolean
+  comenzar
+    RecibirMensaje(ganador, *)
+    RecibirMensaje(perdedor, *)
+    repetir 2
+      RecibirMensaje(termino, *)
+    Informar('ganador',ganador)
+  fin
+variables
+  r1: robot1
+  r2: robot2
+  fiscal: ficalizador
+comenzar
+  AsignarArea(r1, ar1)
+  AsignarArea(r1, ar12)
+  AsignarArea(r1, meta)
+  AsignarArea(r2, ar2)
+  AsignarArea(r2, meta)
+  AsignarArea(fiscal, arF)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 31,1)
+  Iniciar(fiscal, 15,1)
+fin

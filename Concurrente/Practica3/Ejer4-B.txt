@@ -1,0 +1,115 @@
+
+programa ejemplo
+procesos
+  proceso asignarIdRobots
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+  fin
+  proceso moverFlor (E avS numero;E caSnumero)
+  comenzar
+    tomarFlor
+    BloquearEsquina(11,11)
+    Pos(11,11)
+    LiberarEsquina(10,10)
+    depositarFlor
+    Pos(avS,caS)
+    LiberarEsquina(11,11)
+  fin 
+  proceso moverFlor2 (E avS numero;E caSnumero)
+  comenzar
+    tomarFlor
+    Pos(avS,caS)
+    LiberarEsquina(10,10)
+    BloquearEsquina(11,11)
+    Pos(11,11)
+    depositarFlor
+    Pos(avS,caS)
+    LiberarEsquina(11,11)
+  fin 
+  proceso reUbicacionFlor(ES hayFlor boolean)
+  variables
+    AvSegu,actCaSegu numero
+  comenzar
+    AvSegu= PosAv
+    actCaSegu= PosCa
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    si HayFlorEnLaEsquina
+      moverFlor2(AvSegu,actCaSegu)
+    sino
+      hayFlor= F
+      Pos(AvSegu,actCaSegu)
+      LiberarEsquina(10,10)
+  fin
+areas
+  arePC AreaPC (10,10,10,10)
+  areC AreaC (11,11,11,11)
+  arePcord AreaP(1,1,1,1)
+  arePr1 AreaP(9,9,9,9)
+  arePr2 AreaP(9,10,9,10)
+  arePr3 AreaP(9,11,9,11)
+  arePr4 AreaP(9,12,9,12)
+robots
+  robot robot1
+  variables
+    quienSoynumero
+    hayFlor boolean
+  comenzar
+    hayFlor= V
+    RecibirMensaje(quienSoy, cord)
+    mientras hayFlor
+      reUbicacionFlor(hayFlor)
+    EnviarMensaje(quienSoy, cord)
+  fin
+  robot cordinador
+  variables
+    listo boolean
+    idRobotnumero
+  comenzar
+    asignarIdRobots
+    RecibirMensaje(idRobot,)
+    si idRobot = 1 
+      Informar(idRobot)
+    sino
+      si idRobot = 2
+        Informar(idRobot)
+      sino
+        si idRobot = 3
+          Informar(idRobot)
+        sino
+          Informar(idRobot)
+    Pos(11,11)
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+    Pos(1,1)   
+  fin
+variables
+  r1 robot1
+  r2 robot1
+  r3 robot1
+  r4 robot1
+  cord cordinador
+comenzar
+  AsignarArea(r1, arePC)
+  AsignarArea(r1, areC)
+  AsignarArea(r1, arePr1)
+  AsignarArea(r2, arePC)
+  AsignarArea(r2, areC)
+  AsignarArea(r2, arePr2)
+  AsignarArea(r3, arePC)
+  AsignarArea(r3, areC)
+  AsignarArea(r3, arePr3)
+  AsignarArea(r4, arePC)
+  AsignarArea(r4, areC)
+  AsignarArea(r4, arePr4)
+  AsignarArea(cord, areC)
+  AsignarArea(cord, arePcord)
+  Iniciar(r1, 9,9)
+  Iniciar(r2, 9,10)
+  Iniciar(r3, 9,11)
+  Iniciar(r4, 9,12)
+  Iniciar(cord, 1,1)
+fin
