@@ -1,0 +1,100 @@
+
+programa ejemplo
+procesos
+  proceso idRobots
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+  fin
+  proceso calcularGanador(ES idmax: numero;ES max: numero;E idRobot:numero; E totalRecibido: numero)
+  comenzar 
+    si totalRecibido >max
+      idmax:= idRobot
+      max:= totalRecibido
+  fin
+  proceso juntarPapel (ES papeles: numero; ES hayPapel: boolean)
+  variables
+    avS,caS: numero
+  comenzar
+    avS:=PosAv
+    caS:= PosCa
+    BloquearEsquina(11,11)
+    Pos(11,11)
+    si HayPapelEnLaEsquina
+      tomarPapel
+      papeles:= papeles +1
+      Pos(avS,caS)
+      LiberarEsquina(11,11)
+    sino
+      hayPapel:= F
+      Pos(avS,caS)
+      LiberarEsquina(11,11)
+  fin
+areas
+  arePc: AreaPC(11,11,11,11)
+  areaP: AreaP(4,1,4,100)
+  areaP2: AreaP(6,1,6,100)
+  areaP3: AreaP(8,1,8,100)
+  areaP4: AreaP(10,1,10,100)
+  areaPj: AreaP(1,1,1,1)
+robots
+  robot competidor
+  variables
+    quienSoy,papeles: numero
+    hayPapel: boolean
+  comenzar
+    hayPapel:= V
+    papeles:=0
+    RecibirMensaje(quienSoy, juez)
+    mientras (hayPapel) & (PosCa < 100)
+      juntarPapel(papeles, hayPapel)
+      mover
+    juntarPapel(papeles,hayPapel)
+    si (hayPapel = F) | (papeles = 100)
+      EnviarMensaje(quienSoy, juez)
+      EnviarMensaje(papeles, juez)
+  fin
+  robot jurado
+  variables
+    idRobot,idmax: numero
+    max, totalRecibido: numero
+  comenzar
+    max:= -1
+    idRobots
+    repetir 4
+      RecibirMensaje(idRobot, *)
+      si idRobot = 1
+        RecibirMensaje(totalRecibido, r1)
+      sino
+        si idRobot = 2
+          RecibirMensaje(totalRecibido, r2)
+        sino
+          si idRobot = 3
+            RecibirMensaje(totalRecibido, r3)
+          sino 
+            RecibirMensaje(totalRecibido, r4)
+      calcularGanador(idmax,max,idRobot,totalRecibido)
+    Informar(idmax)
+  fin
+variables
+  r1,r2,r3,r4: competidor
+  juez: jurado
+
+comenzar
+  AsignarArea(r1,areaP)
+  AsignarArea(r1,arePc)
+  AsignarArea(r2,areaP2)
+  AsignarArea(r2,arePc)
+  AsignarArea(r3,areaP3)
+  AsignarArea(r3,arePc)
+  AsignarArea(r4,areaP4)
+  AsignarArea(r4,arePc)
+  AsignarArea(juez,areaPj)
+  Iniciar(juez, 1,1)
+  Iniciar(r1, 4,1)
+  Iniciar(r2, 6,1)
+  Iniciar(r3, 8,1)
+  Iniciar(r4, 10,1)
+fin

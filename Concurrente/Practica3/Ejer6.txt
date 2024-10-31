@@ -1,0 +1,281 @@
+
+programa ejemplo
+procesos
+  proceso EstablecerIdRobots
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores := flores + 1
+  fin
+
+  proceso juntarPapeles(ES papeles: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles := papeles + 1
+  fin
+
+  proceso hacerCuadranteR1(ES flores: numero)
+  comenzar
+    juntarFlores(flores)
+    repetir 6
+      mover
+      juntarFlores(flores)
+    derecha
+    repetir 2
+      mover
+      juntarFlores(flores)
+    BloquearEsquina(5,8)
+    mover
+    juntarFlores(flores)
+    mover
+    LiberarEsquina(5,8)
+    juntarFlores(flores)
+    repetir 2
+      mover
+      juntarFlores(flores)
+    derecha
+    repetir 2
+      mover
+      juntarFlores(flores)
+    BloquearEsquina(8,5)
+    mover
+    juntarFlores(flores)
+    mover
+    LiberarEsquina(8,5)
+    juntarFlores(flores)
+    repetir 2
+      mover
+      juntarFlores(flores)
+    derecha
+    repetir 6
+      mover
+      juntarFlores(flores)
+  fin
+
+  proceso hacerCuadranteR3(ES papeles: numero)
+  comenzar
+    juntarPapeles(papeles)
+    repetir 5
+      mover
+      juntarPapeles(papeles)
+    BloquearEsquina(9,14)
+    mover
+    juntarPapeles(papeles)
+    mover
+    LiberarEsquina(9,14)
+    derecha
+    juntarPapeles(papeles)
+    repetir 7
+      mover
+      juntarPapeles(papeles)
+    derecha
+    repetir 7
+      mover
+      juntarPapeles(papeles)
+    derecha
+    BloquearEsquina(15,9)
+    mover
+    juntarPapeles(papeles)
+    mover
+    LiberarEsquina(15,9)
+    juntarPapeles(papeles)
+    repetir 5
+      mover
+      juntarPapeles(papeles)
+  fin
+  proceso hacerCuadranteR2(ES papeles:numero ;ES flores: numero)
+  comenzar
+    juntarPapeles(papeles)
+    juntarFlores(flores)
+    repetir 2
+      mover
+      juntarPapeles(papeles)
+      juntarFlores(flores)
+    BloquearEsquina(5,8)
+    mover
+    juntarPapeles(papeles)
+    juntarFlores(flores)
+    mover
+    LiberarEsquina(5,8)
+    juntarPapeles(papeles)
+    juntarFlores(flores)
+    repetir 6
+      mover
+      juntarPapeles(papeles)
+      juntarFlores(flores)
+    derecha
+    repetir 3
+      mover
+      juntarPapeles(papeles)
+      juntarFlores(flores)
+    BloquearEsquina(9,15)
+    mover
+    juntarPapeles(papeles)
+    juntarFlores(flores)
+    mover
+    LiberarEsquina(9,15)
+    juntarPapeles(papeles)
+    juntarFlores(flores)
+    repetir 5
+      mover
+      juntarPapeles(papeles)
+      juntarFlores(flores)
+    derecha
+    repetir 5
+      mover
+      juntarPapeles(papeles)
+      juntarFlores(flores)
+    BloquearEsquina(15,15)
+    mover
+    juntarPapeles(papeles)
+    juntarFlores(flores)
+    mover
+    LiberarEsquina(15,15)
+    juntarPapeles(papeles)
+    juntarFlores(flores)
+    repetir 3
+      mover
+      juntarPapeles(papeles)
+      juntarFlores(flores)
+    derecha
+    repetir 6
+      mover
+      juntarPapeles(papeles)
+      juntarFlores(flores)
+    BloquearEsquina(8,5)
+    mover
+    juntarPapeles(papeles)
+    juntarFlores(flores)
+    mover
+    LiberarEsquina(8,5)
+    juntarPapeles(papeles)
+    juntarFlores(flores)
+    repetir 2
+      mover
+      juntarPapeles(papeles)
+      juntarFlores(flores)      
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    flores: numero
+    quienSoy: numero
+    numCa:numero
+  comenzar
+    flores := 0
+    RecibirMensaje(quienSoy, fiscal)
+    hacerCuadranteR1(flores)
+    EnviarMensaje(quienSoy,fiscal)
+    RecibirMensaje(numCa,fiscal)
+    Pos(1,numCa)
+    repetir 2
+      derecha
+    mientras (flores > 0) & (PosAv < 100)
+      depositarFlor
+      mover
+      flores:= flores -1
+    si flores > 0
+      mientras HayFlorEnLaBolsa
+        depositarFlor
+  fin
+  robot robot2
+  variables
+    papeles,flores: numero
+    quienSoy: numero
+    numCa:numero
+    condi: boolean
+  comenzar
+    papeles := 0
+    flores:=0
+    condi:= V
+    RecibirMensaje(quienSoy, fiscal)
+    hacerCuadranteR2(papeles, flores)
+    EnviarMensaje(quienSoy,fiscal)
+    RecibirMensaje(numCa,fiscal)
+    Pos(1,numCa)
+    repetir 2
+      derecha
+    mientras(PosAv < 100) &  (condi) 
+      si (flores = 0) & (papeles = 0)
+        condi:= F
+      si (flores > 0)
+        depositarFlor
+      si (papeles > 0)
+        depositarPapel
+      mover
+      papeles:= papeles -1
+      flores:= flores -1
+    si papeles > 0
+      mientras HayPapelEnLaBolsa
+        depositarPapel
+    si flores > 0
+      mientras HayFlorEnLaBolsa
+        depositarFlor
+  fin
+  robot robot3
+  variables
+    papeles: numero
+    quienSoy: numero
+    numCa:numero
+  comenzar
+    papeles := 0
+    RecibirMensaje(quienSoy, fiscal)
+    hacerCuadranteR3(papeles)
+    EnviarMensaje(quienSoy, fiscal)
+    RecibirMensaje(numCa,fiscal)
+    Pos(1,numCa)
+    repetir 2
+      derecha
+    mientras (papeles > 0) & (PosAv < 100)
+      depositarPapel
+      mover
+      papeles:= papeles -1 
+    si papeles > 0
+      mientras HayPapelEnLaBolsa
+        depositarPapel
+    
+  fin
+  robot patron
+  variables
+    papeles: numero
+    quienEs: numero
+    numCa: numero
+  comenzar
+    EstablecerIdRobots
+    numCa:= 20
+    repetir 3
+      RecibirMensaje(quienEs, *)
+      si quienEs = 1
+        EnviarMensaje(numCa, r1)
+      sino
+        si quienEs =2
+          EnviarMensaje(numCa, r2)
+        sino
+          EnviarMensaje(numCa, r3)
+      numCa:= numCa+1
+        
+  fin  
+variables
+  r1: robot1
+  r2: robot2
+  r3: robot3
+  fiscal: patron
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r3, ciudad)
+  AsignarArea(fiscal, ciudad)
+  Iniciar(fiscal, 1,1)
+  Iniciar(r1, 2,2)
+  Iniciar(r2, 5,5)
+  Iniciar(r3, 9,9)
+fin
