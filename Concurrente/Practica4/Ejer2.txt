@@ -1,0 +1,84 @@
+{Bienvenidos al entorno CMRE.
+Lo siguiente es un código de ejemplo que implementa un
+proceso que recibe un número de avenida como parámetro,
+se posiciona en esa avenida y la recorre.}
+
+programa ejemplo
+areas
+  p1: AreaP(5,1,5,100) 
+  p2: AreaP(10,1,10,100)
+  p3: AreaP (11,1,11,1)
+  p4: AreaP (12,1,12,1)
+  pc: AreaPC(50,50,50,50)
+robots
+  robot productores
+  variables
+    papel,avS,caS: numero
+    termine: boolean
+  comenzar
+    papel:= 0
+    termine:= F
+    avS:= PosAv
+    mientras (~termine)
+      caS:= PosCa
+      si HayPapelEnLaEsquina
+        tomarPapel
+        papel:= papel+1
+        si (papel = 5)
+          BloquearEsquina(50,50)
+          Pos(50,50)
+          repetir 5
+            depositarPapel
+          Pos(avS,caS)
+          LiberarEsquina(50,50)
+          papel:= 0
+      sino 
+        si(PosCa = 100)
+          termine:= V
+        sino
+          mover
+  fin
+  robot consumidores
+  variables
+    intentos, avS,caS: numero
+    cantRandom,papel: numero
+  comenzar
+    intentos:= 0
+    papel:= 0
+    avS:= PosAv
+    caS:= PosCa
+    mientras (intentos <> 8)
+      Random(cantRandom, 2,5)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      mientras (HayPapelEnLaEsquina) & (papel< cantRandom)
+        tomarPapel
+        papel:= papel+1
+      Pos(avS,caS)
+      LiberarEsquina(50,50)
+      si papel = cantRandom
+        repetir cantRandom
+          depositarPapel
+        intentos:= 0
+        papel:= 0
+      sino
+        intentos:= intentos +1
+        papel:= 0   
+  fin
+variables
+  r1,r2: productores
+  r3,r4: consumidores
+comenzar
+  AsignarArea(r1, p1)
+  AsignarArea(r1, pc)
+  AsignarArea(r2, p2)
+  AsignarArea(r2, pc)
+  AsignarArea(r3, p3)
+  AsignarArea(r3, pc)
+  AsignarArea(r4, p4)  
+  AsignarArea(r4, pc) 
+  Iniciar(r1, 5,1)
+  Iniciar(r2, 10,1)
+  Iniciar(r3, 11,1)
+  Iniciar(r4, 12,1)
+fin
