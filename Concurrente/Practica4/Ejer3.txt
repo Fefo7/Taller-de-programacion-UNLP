@@ -1,0 +1,84 @@
+{siempre hay un robot bugueado}
+programa ejemplo
+procesos
+  proceso incializarIdRobots
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+areas
+  p1: AreaP(1,1,1,100)
+  p2: AreaP(2,1,2,100)
+  p3: AreaP(3,1,3,100)
+  pCord: AreaP(50,50,50,50)
+robots
+  robot robot1
+  variables
+    quienSoy: numero
+    ok,okR: boolean
+  comenzar
+    ok:= V
+    RecibirMensaje(quienSoy, cord)
+    repetir 4
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+      mover
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+    si quienSoy = 1
+      EnviarMensaje(ok, r2)
+      EnviarMensaje(ok, r3)
+      repetir 2
+        RecibirMensaje(okR,*)    
+    sino
+      si quienSoy = 2
+        EnviarMensaje(ok, r1)
+        EnviarMensaje(ok, r3)
+        repetir 2
+          RecibirMensaje(okR,*)    
+      sino
+        EnviarMensaje(ok, r1)
+        EnviarMensaje(ok, r2)
+        repetir 2
+          RecibirMensaje(okR,*)  
+    repetir 19
+      repetir 5
+        mover
+        mientras HayPapelEnLaEsquina
+          tomarPapel
+      si quienSoy = 1
+        EnviarMensaje(ok, r2)
+        EnviarMensaje(ok, r3)
+        repetir 2
+          RecibirMensaje(okR,*)    
+      sino
+        si quienSoy = 2
+          EnviarMensaje(ok, r1)
+          EnviarMensaje(ok, r3)
+          repetir 2
+            RecibirMensaje(okR,*)    
+        sino
+          EnviarMensaje(ok, r1)
+          EnviarMensaje(ok, r2)
+          repetir 2
+            RecibirMensaje(okR,*)  
+   
+  fin
+  robot cordinador
+  comenzar
+    incializarIdRobots
+  fin
+variables
+  r1,r2,r3: robot1
+  cord: cordinador
+comenzar
+  AsignarArea(r1, p1)
+  AsignarArea(r2, p2)
+  AsignarArea(r3, p3)
+  AsignarArea(cord, pCord)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2,1)
+  Iniciar(r3, 3,1)
+  Iniciar(cord, 50,50)
+fin
