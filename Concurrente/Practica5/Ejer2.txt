@@ -1,0 +1,119 @@
+programa ejemplo
+procesos
+  proceso recolectarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores +1
+  fin
+  proceso setIdRobots
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  proceso depositarFlores(E cant: numero;E avs:numero;E cas: numero)
+  comenzar
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    repetir cant
+      depositarFlor
+    Pos(avs,cas)
+    LiberarEsquina(50,50)
+  fin
+areas
+  pc: AreaPC (50,50,50,50)
+  p1: AreaP(1,1,100,1)
+  p2: AreaP(1,2,100,2)  
+  p3: AreaP(1,3,100,3)
+  p4: AreaP(1,4,1,4)
+robots
+  robot recolector
+  variables
+    quienSoy,avs,cas: numero  
+    floresT: numero
+    ok:boolean
+  comenzar
+    floresT:=0
+    cas:= PosCa
+    RecibirMensaje(quienSoy,fs)
+    derecha
+    repetir 9
+      recolectarFlores(floresT)
+      mover
+    recolectarFlores(floresT)
+    avs:=PosAv
+    depositarFlores(floresT,avs,cas)
+    floresT:= 0
+    si quienSoy = 1
+      EnviarMensaje(V,r2)
+      EnviarMensaje(V,r3)
+      RecibirMensaje(ok, *)
+      RecibirMensaje(ok, *)
+    sino
+      si quienSoy =2
+        EnviarMensaje(V,r1)
+        EnviarMensaje(V,r3)
+        RecibirMensaje(ok, *)
+        RecibirMensaje(ok, *)
+      sino
+        EnviarMensaje(V,r1)
+        EnviarMensaje(V,r2)
+        RecibirMensaje(ok, *)
+        RecibirMensaje(ok, *)
+    repetir 9
+      repetir 10
+        recolectarFlores(floresT)
+        mover  
+      avs:=PosAv
+      depositarFlores(floresT,avs,cas)  
+      floresT:= 0
+      si quienSoy = 1
+        EnviarMensaje(V,r2)
+        EnviarMensaje(V,r3)
+        RecibirMensaje(ok, *)
+        RecibirMensaje(ok, *)
+      sino
+        si quienSoy =2
+          EnviarMensaje(V,r1)
+          EnviarMensaje(V,r3)
+          RecibirMensaje(ok, *)
+          RecibirMensaje(ok, *)
+        sino
+          EnviarMensaje(V,r1)
+          EnviarMensaje(V,r2)
+          RecibirMensaje(ok, *)
+          RecibirMensaje(ok, *)
+    EnviarMensaje(V,fs)      
+  fin
+  robot fiscal
+  variables
+    ok:boolean
+    cantF:numero
+  comenzar
+    cantF:=0
+    setIdRobots
+    repetir 3
+      RecibirMensaje(ok,*)
+    Pos(50,50)
+    recolectarFlores(cantF)
+    Pos(1,4)
+    Informar('flores totales',cantF)
+  fin
+variables
+  r1,r2,r3: recolector
+  fs: fiscal
+comenzar
+  AsignarArea(r1, p1)
+  AsignarArea(r1, pc)
+  AsignarArea(r2, p2)
+  AsignarArea(r2, pc)
+  AsignarArea(r3, p3)
+  AsignarArea(r3, pc)
+  AsignarArea(fs, p4)
+  AsignarArea(fs, pc)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 1,2)
+  Iniciar(r3, 1,3)
+  Iniciar(fs, 1,4)
+fin
