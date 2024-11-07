@@ -1,0 +1,126 @@
+programa ejemplo
+procesos
+  proceso calcularMaximo(ES idMax:numero;E flores1:numero;E flores2:numero;E flores3: numero)  
+  variables
+    max: numero
+  comenzar
+    max:= -1
+    si flores1 > max
+      max:= flores1
+      idMax:= 1
+    si flores2 > max
+      max:= flores2
+      idMax:= 2
+    si flores3 > max
+      max:= flores3
+      idMax:= 3
+  fin
+  proceso bloqueoDeEsquina(E avs: numero; E cas: numero;E cantF:numero)
+  comenzar
+    repetir cantF
+      si HayFlorEnLaBolsa
+        BloquearEsquina(25,25)
+        Pos(25,25)
+        depositarFlor 
+        Pos(avs,cas)
+        LiberarEsquina(25,25)
+  fin
+  proceso hacerRectangulo (E largo: numero ;E ancho:numero; ES flores:numero) 
+  variables
+    avs,cas: numero
+  comenzar
+    repetir 2
+      repetir largo
+        juntarFlores(flores)
+        mover
+      derecha
+      avs:= PosAv
+      cas:= PosCa
+      bloqueoDeEsquina(avs,cas, flores)
+      repetir ancho
+        juntarFlores(flores)
+        mover
+      derecha
+      avs:= PosAv
+      cas:= PosCa
+      bloqueoDeEsquina(avs,cas,flores)
+  fin
+  proceso establecerIdRobots
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores +1
+  fin
+areas
+  com: AreaPC(25,25,25,25)
+  p1: AreaP(24,24,24,24)
+  p2: AreaP(1,1,6,11)
+  p3: AreaP(7,1,12,11)
+  p4: AreaP(13,1,18,11)
+robots
+  robot recolectores
+  variables
+    quienSoy: numero
+    largo,ancho,flores: numero
+  comenzar
+    flores:= 0
+    RecibirMensaje(quienSoy, cord)
+    RecibirMensaje(largo,cord)
+    RecibirMensaje(ancho,cord)
+    hacerRectangulo(largo,ancho,flores)
+    EnviarMensaje(quienSoy, cord)
+    EnviarMensaje(flores, cord)
+  fin
+  robot cordinador
+  variables
+    quienEs: numero
+    largo, ancho,idMax: numero
+    flores1,flores2,flores3:numero
+  comenzar
+    establecerIdRobots
+    Random(largo, 1,10)
+    Random(ancho, 1,5)
+    EnviarMensaje(largo, r1)
+    EnviarMensaje(ancho, r1)
+    Random(largo, 1,10)
+    Random(ancho, 1,5)
+    EnviarMensaje(largo, r2)
+    EnviarMensaje(ancho, r2)
+    Random(largo, 1,11)
+    Random(ancho, 1,5)
+    EnviarMensaje(largo, r3)
+    EnviarMensaje(ancho, r3)
+    repetir 3
+      RecibirMensaje(quienEs,*)
+      si quienEs = 1
+        RecibirMensaje(flores1, r1)
+      sino
+        si quienEs = 2  
+          RecibirMensaje(flores2, r2)
+        sino
+          RecibirMensaje(flores3, r3)
+    calcularMaximo(idMax,flores1,flores2,flores3)  
+    Informar('mas flores juntadas', idMax)
+  fin
+variables
+  r1,r2,r3: recolectores
+  cord: cordinador
+comenzar
+  AsignarArea(cord, p1)
+  AsignarArea(r1, com)
+  AsignarArea(r1, p2)
+  AsignarArea(r2, p3)
+  AsignarArea(r2, com)
+  AsignarArea(r3, p4)
+  AsignarArea(r3, com)
+  Iniciar(cord, 24,24)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 7,1)
+  Iniciar(r3, 13,1)
+fin

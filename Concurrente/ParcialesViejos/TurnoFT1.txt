@@ -1,0 +1,120 @@
+programa ejemplo
+procesos
+  proceso EnviarEquipo
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r3)
+  fin
+  proceso juntarFlores(ES  flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores +1
+  fin
+  proceso hacerEscalon(E largo: numero; E ancho: numero;ES flores: numero)
+  comenzar
+    repetir largo
+      juntarFlores(flores)
+      mover
+    derecha
+    repetir ancho
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+  fin
+areas
+  pcA: AreaPC(1,1,11,10)
+  pcB: AreaPC(13,1,23,10)
+  pfs: AreaP(30,1,30,1) 
+  pc20: AreaPC(20,20,20,20)
+robots
+  robot corredorA
+  variables 
+    equipo: numero
+    flores: numero
+    avs,cas:numero
+  comenzar
+    flores:= 0
+    RecibirMensaje(equipo,fs)
+    hacerEscalon(9,9,flores)
+    si equipo = 1
+      EnviarMensaje(equipo,r2)
+      EnviarMensaje(flores,r2)
+    sino
+      EnviarMensaje(equipo,r4)
+      EnviarMensaje(flores,r4)
+    avs:= PosAv
+    cas:= PosCa
+    repetir flores
+      si HayFlorEnLaBolsa
+        BloquearEsquina(20,20)
+        Pos(20,20)
+        depositarFlor
+        Pos(avs,cas)
+        LiberarEsquina(20,20)
+  fin
+  robot corredorB
+  variables 
+    equipo,flores,auxF: numero
+    avs,cas:numero
+  comenzar
+    auxF:= 0
+    repetir 2
+      derecha
+    RecibirMensaje(equipo,*)
+    si equipo = 1  
+      RecibirMensaje(flores, r1)
+    sino
+      RecibirMensaje(flores, r3)
+    hacerEscalon(9,9,auxF)
+    flores:= flores + auxF
+    avs:= PosAv
+    cas:= PosCa
+    repetir flores
+      si HayFlorEnLaBolsa
+        BloquearEsquina(20,20)
+        Pos(20,20)
+        depositarFlor
+        Pos(avs,cas)
+        LiberarEsquina(20,20)
+    EnviarMensaje(equipo, fs)
+    EnviarMensaje(flores, fs)
+  fin
+  robot fiscal
+  variables 
+    equipo,flores1,flores2: numero
+  comenzar
+    EnviarEquipo
+    repetir 2
+      RecibirMensaje(equipo,*)
+      si equipo = 1
+        RecibirMensaje(flores1, r2) 
+      sino
+        RecibirMensaje(flores2, r4) 
+    si(flores1> flores2)
+      Informar('cant flores equipo1',flores1)
+    sino
+      Informar('cant flores equipo2',flores2)
+  fin
+variables
+  r1: corredorA
+  r2: corredorB
+  r3: corredorA
+  r4: corredorB
+  fs:fiscal
+comenzar
+  AsignarArea(r1, pcA)
+  AsignarArea(r1,pc20)
+  AsignarArea(r2, pcA)
+  AsignarArea(r2,pc20)
+  AsignarArea(r3, pcB)
+  AsignarArea(r3,pc20)
+  AsignarArea(r4, pcB)
+  AsignarArea(r4,pc20)
+  AsignarArea(fs, pfs)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 11,10)
+  Iniciar(r3, 13,1)
+  Iniciar(r4, 23,10)
+  Iniciar(fs, 30,1)
+fin

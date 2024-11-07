@@ -1,0 +1,89 @@
+programa ejemplo
+procesos
+  proceso EstablecerId
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+areas
+  pc: AreaPC(10,10,30,30)
+  p1: AreaP(1,1,1,1)
+  p2: AreaP(2,1,2,1)
+  p3: AreaP(3,1,3,1)
+  pf: AreaP(9,9,9,9)
+robots
+  robot floreros
+  variables
+    quienSoy,cantIntentos:numero
+    avs,cas,av,ca:numero
+  comenzar
+    avs:= PosAv
+    cas:= PosCa
+    RecibirMensaje(quienSoy, fs)
+    EnviarMensaje(quienSoy, fs)
+    Random(cantIntentos, 2,5)
+    EnviarMensaje(cantIntentos, fs)
+    repetir cantIntentos
+      EnviarMensaje(quienSoy, fs)
+      RecibirMensaje(av, fs)
+      RecibirMensaje(ca, fs)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+      Pos(avs,cas)
+      LiberarEsquina(av,ca)
+  fin
+  robot fiscal
+  variables
+    quienEs:numero
+    intentos,intentosT:numero
+    av,ca: numero
+  comenzar
+    intentosT:= 0
+    EstablecerId
+    repetir 3
+      RecibirMensaje(quienEs, *)
+      si  quienEs = 1 
+        RecibirMensaje(intentos, r1)
+        intentosT:= intentos + intentosT
+      sino
+        si quienEs=2
+          RecibirMensaje(intentos, r2)
+          intentosT:= intentos + intentosT
+        sino
+          RecibirMensaje(intentos, r3)
+          intentosT:= intentos + intentosT
+    repetir intentosT
+      RecibirMensaje(quienEs,*)
+      Random(av,10,30)
+      Random(ca,10,30)
+      si quienEs = 1
+        EnviarMensaje(av,r1)
+        EnviarMensaje(ca,r1)
+      sino
+        si quienEs = 2
+          EnviarMensaje(av,r2)
+          EnviarMensaje(ca,r2)
+        sino
+          EnviarMensaje(av,r3)
+          EnviarMensaje(ca,r3)
+    Informar('intentos',intentosT) 
+  fin
+variables
+  r1,r2,r3: floreros
+  fs:fiscal
+comenzar
+  AsignarArea(r1, p1)
+  AsignarArea(r1, pc)
+  AsignarArea(r2, p2)
+  AsignarArea(r2, pc)
+  AsignarArea(r3, p3)
+  AsignarArea(r3, pc)
+  AsignarArea(fs, pf)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2,1)
+  Iniciar(r3, 3,1)
+  Iniciar(fs, 9,9)
+fin
